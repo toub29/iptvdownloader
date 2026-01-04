@@ -45,6 +45,6 @@ const installPwa = async () => {
     title="Install App"
   >
     <span class="icon">📱</span>
-    <span class="text">Install App</span>
+    <span class="text desktop-only">Install App</span>
   </button>
 </template>

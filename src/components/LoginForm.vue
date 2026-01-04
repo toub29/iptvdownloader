@@ -79,5 +79,11 @@ const handleSubmit = async () => {
       protégé par des droits d'auteur sans autorisation est illégal. Assurez-vous de respecter les lois en vigueur dans
       votre pays.
     </p>
+
+    <div class="source-code-banner">
+      <a href="https://github.com/toub29/iptvdownloader" target="_blank" rel="noopener noreferrer">
+        Code source sur GitHub
+      </a>
+    </div>
   </div>
 </template>

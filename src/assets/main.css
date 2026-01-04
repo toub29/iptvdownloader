@@ -668,6 +668,11 @@ nav button.active {
   .mobile-only {
     display: flex;
   }
+
+  .install-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
 }
 
 /* Styles for Home.vue scroll behavior */
@@ -695,4 +700,23 @@ nav button.active {
   flex: 1;
   overflow-y: auto;
   height: 100%;
+}
+
+.source-code-banner {
+  background-color: #f8f9fa;
+  padding: 0.5rem;
+  margin-top: 1.5rem;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+.source-code-banner a {
+  color: #495057;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.source-code-banner a:hover {
+  text-decoration: underline;
 }
