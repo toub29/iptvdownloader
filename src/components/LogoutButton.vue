@@ -1,11 +1,14 @@
 <script setup>
 import { useAuthStore } from '../stores/auth'
+import {useContentStore} from "@/stores/content.js";
 
 const authStore = useAuthStore()
+const contentStore = useContentStore()
 
 const handleLogout = () => {
   if (confirm('Are you sure you want to logout?')) {
     authStore.logout()
+    contentStore.resetFilters()
   }
 }
 </script>
