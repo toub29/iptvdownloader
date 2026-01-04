@@ -1,29 +1,14 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import {XtreamService} from '../services/xtream'
+import {encryptStorage} from '../utils/encryption'
 
 export const useAuthStore = defineStore('auth', () => {
-    // --- STATE ---
     const isAuthenticated = ref(false)
     const credentials = ref({
         url: '',
         username: '',
         password: ''
     })
-
-    // Action principale de connexion
-    const login = async () => {
-        if (!credentials.value.url || !credentials.value.username || !credentials.value.password) {
-            throw new Error('URL, username and password are required.')
-        }
-
-        // Création du service et authentification
-        const service = XtreamService.create(credentials.value.url, credentials.value.username, credentials.value.password)
-        await service.authenticate()
-
-        // Si succès, on met à jour l'état
-        isAuthenticated.value = true
-    }
 
     // Action de déconnexion
     const resetCredentials = () => {
@@ -40,13 +25,13 @@ export const useAuthStore = defineStore('auth', () => {
     return {
         isAuthenticated: isAuthenticated,
         credentials: credentials,
-        login: login,
         logout: logout,
         resetCredentials: resetCredentials
     }
 }, {
     persist: {
-        // On ne persiste que l'URL. Le reste est géré par le navigateur (autocomplete) ou la session mémoire.
-        paths: ['credentials.url'],
+        // On persiste tout l'état nécessaire pour survivre au F5
+        paths: ['credentials', 'isAuthenticated'],
+        storage: encryptStorage,
     },
 })

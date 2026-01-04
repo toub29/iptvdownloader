@@ -12,6 +12,3 @@ const { isLoading, loadingMessage } = storeToRefs(loadingStore)
     <div class="message">{{ loadingMessage }}</div>
   </div>
 </template>
-
-<style scoped>
-</style>

@@ -1,9 +1,12 @@
 import {ContentType} from "@/utils/constants.js";
 import {config} from "@/config.js";
+import {useAuthStore} from "../stores/auth";
+import {storeToRefs} from "pinia";
 
 let instance = null;
 
 export class XtreamService {
+
     constructor(url, username, password) {
         this.url = url.replace(/\/$/, ''); // Remove trailing slash
         this.username = username;
@@ -13,14 +16,22 @@ export class XtreamService {
         this.proxyUrl = config.proxyUrl;
     }
 
-    static create(url, username, password) {
-        instance = new XtreamService(url, username, password);
-        return instance;
-    }
-
     static getInstance() {
+        const {credentials} = storeToRefs(useAuthStore())
+
+        if (!credentials.value.url || !credentials.value.username || !credentials.value.password) {
+            throw new Error('URL, username and password are required.')
+        }
+        // Si une instance existe déja, on vérifie si les url/identifiants/pass ont changé pour recreer un nouveau service
+        if (instance) {
+            const cleanUrl = credentials.value.url.replace(/\/$/, '');
+            if (instance.url !== cleanUrl || instance.username !== credentials.value.username || instance.password !== credentials.value.password) {
+                instance = null;
+            }
+        }
         if (!instance) {
-            throw new Error('XtreamService not initialized');
+            // Création du service
+            instance = new XtreamService(credentials.value.url, credentials.value.username, credentials.value.password)
         }
         return instance;
     }

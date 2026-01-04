@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, onUnmounted, ref, shallowRef, watch} from 'vue'
+import {computed, onMounted, ref, shallowRef, watch} from 'vue'
 import {useToast} from 'vue-toastification'
 import ItemCount from '@/components/ItemCount.vue'
 import ContentList from '@/components/ContentList.vue'
@@ -27,25 +27,10 @@ const contentListRef = ref(null)
 const showFilters = ref(true)
 
 // Chargement des données (films, séries, catégories)
-onMounted(() => {
-  loadContent()
-})
-
-onUnmounted(() => {
-  // Nettoyage de l'état de la page Home lorsque l'utilisateur se déconnecte
-  movies.value = []
-  series.value = []
-  movieCategories.value = []
-  seriesCategories.value = []
-  selectedSeries.value = null
-  contentStore.resetFilters()
-})
-
-const loadContent = async () => {
+onMounted(async () => {
   loadingStore.startLoading('Loading content...')
   try {
     const service = XtreamService.getInstance()
-
     const results = await Promise.allSettled([
       service.getMovies(),
       service.getSeries(),
@@ -80,7 +65,7 @@ const loadContent = async () => {
   } finally {
     loadingStore.stopLoading()
   }
-}
+})
 
 // Réinitialise les filtres et la sélection de série quand on change d'onglet
 watch(activeTab, () => {
@@ -94,15 +79,13 @@ const isSerieDetailPanel = computed(() => {
 
 const downloadMovie = (movie) => {
   const extension = movie.container_extension || 'mp4'
-  const service = XtreamService.getInstance()
-  const url = service.getMovieDownloadUrl(movie.stream_id, extension)
+  const url =  XtreamService.getInstance().getMovieDownloadUrl(movie.stream_id, extension)
   triggerDownload(url, movie.name)
 }
 
 const downloadEpisode = (episode) => {
   const extension = episode.container_extension || 'mp4'
-  const service = XtreamService.getInstance()
-  const url = service.getEpisodeDownloadUrl(episode.id, extension)
+  const url =  XtreamService.getInstance().getEpisodeDownloadUrl(episode.id, extension)
   triggerDownload(url, episode.title)
 }
 
@@ -124,13 +107,13 @@ const handleScroll = (event) => {
 
 <template>
   <div class="content-area">
-
-    <SeriesDetail
-        v-if="isSerieDetailPanel"
-        :series="selectedSeries"
-        @back="selectedSeries = null"
-        @download-episode="downloadEpisode"
-    />
+    <template v-if="isSerieDetailPanel">
+      <SeriesDetail
+          :series="selectedSeries"
+          @back="selectedSeries = null"
+          @download-episode="downloadEpisode"
+      />
+    </template>
     <template v-else>
       <div class="search-bar-container" :class="{ 'hidden': !showFilters }">
         <div class="search-bar">
@@ -154,6 +137,3 @@ const handleScroll = (event) => {
 
   </div>
 </template>
-
-<style scoped>
-</style>

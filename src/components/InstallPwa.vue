@@ -48,6 +48,3 @@ const installPwa = async () => {
     <span class="text">Install App</span>
   </button>
 </template>
-
-<style scoped>
-</style>

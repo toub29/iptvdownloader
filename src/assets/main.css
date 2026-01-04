@@ -102,8 +102,35 @@ header {
   gap: 1rem;
 }
 
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .logout-logo {
+  cursor: default;
+}
+
+.logout-btn, .account-info-btn {
+  background: none;
+  border: none;
+  color: var(--vt-c-text-dark-1);
   cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.logout-btn:hover, .account-info-btn:hover {
+  color: var(--primary-color);
+}
+
+.mobile-only {
+  display: none;
 }
 
 nav {
@@ -526,6 +553,38 @@ nav button.active {
   font-size: 1rem;
 }
 
+/* Account Info Modal */
+.account-info-modal table {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  border-collapse: collapse;
+}
+
+.account-info-modal th, .account-info-modal td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.account-info-modal th {
+  width: 40%;
+  font-weight: bold;
+  color: #555;
+}
+
+.account-info-modal td {
+  color: #333;
+}
+
+.account-info-modal .error-message {
+  color: red;
+  background-color: #ffebee;
+  border: 1px solid red;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
 /* Loading Overlay */
 .loading-overlay {
   position: fixed;
@@ -600,6 +659,14 @@ nav button.active {
   /* Ajustement de la grille pour mobile */
   .items-container {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: flex;
   }
 }
 
