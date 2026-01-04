@@ -26,7 +26,7 @@ const formattedUserInfo = computed(() => {
   <div v-if="isOpen" class="modal-overlay" @click.self="emit('close')">
     <div class="modal-content account-info-modal">
       <h3>Account Information</h3>
-      <table v-else-if="userInfo">
+      <table>
         <tbody>
           <tr v-for="[key, value] in formattedUserInfo" :key="key">
             <th>{{ key }}</th>

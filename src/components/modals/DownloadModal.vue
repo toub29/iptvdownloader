@@ -19,7 +19,7 @@ defineEmits(['close']);
         liées à votre navigateur.
       </p>
       <div class="link-container">
-        <a :href="video.url" target="_blank"  rel="noopener noreferrer">{{ video.name }}</a>
+        <a :href="video.url" target="_blank"  rel="noopener">{{ video.name }}</a>
       </div>
       <button @click="$emit('close')" class="close-btn">Fermer</button>
     </div>

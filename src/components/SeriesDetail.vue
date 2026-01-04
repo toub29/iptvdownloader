@@ -3,7 +3,7 @@ import {ref, onMounted} from 'vue'
 import {XtreamService} from '../services/xtream'
 import {useLoadingStore} from '../stores/loading'
 import {useToast} from 'vue-toastification'
-
+import DownloadModal from '@/components/modals/DownloadModal.vue'
 
 const props = defineProps({
   series: {
@@ -12,11 +12,13 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['back', 'download-episode'])
-const episodes = ref({})
-const error = ref(null)
 const loadingStore = useLoadingStore()
 const toast = useToast()
+defineEmits(['back'])
+
+const episodes = ref({})
+const error = ref(null)
+const videoToDownload = ref(null)
 
 onMounted(async () => {
   loadingStore.startLoading('Loading episodes...')
@@ -32,8 +34,10 @@ onMounted(async () => {
       .finally(() => loadingStore.stopLoading())
 })
 
-const handleDownload = (episode) => {
-  emit('download-episode', episode)
+const downloadEpisode = (episode) => {
+  const extension = episode.container_extension || 'mp4'
+  const url =  XtreamService.getInstance().getEpisodeDownloadUrl(episode.id, extension)
+  videoToDownload.value = { url, name: episode.title };
 }
 </script>
 
@@ -53,7 +57,7 @@ const handleDownload = (episode) => {
               <span class="episode-num">E{{ episode.episode_num }}</span>
               <span class="episode-title">{{ episode.title }}</span>
             </div>
-            <button @click="handleDownload(episode)" class="download-btn">
+            <button @click="downloadEpisode(episode)" class="download-btn">
               Download
             </button>
           </div>
@@ -61,4 +65,6 @@ const handleDownload = (episode) => {
       </div>
     </div>
   </div>
+  <!-- modal de telechargement series -->
+  <DownloadModal :video="videoToDownload" @close="videoToDownload = null" />
 </template>

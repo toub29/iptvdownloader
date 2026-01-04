@@ -3,6 +3,8 @@ import { ref, computed, watch } from 'vue'
 import { useContentStore } from '../stores/content'
 import {ContentType} from "@/utils/constants.js";
 import {storeToRefs} from "pinia";
+import DownloadModal from "@/components/modals/DownloadModal.vue";
+import {XtreamService} from "@/services/xtream.js";
 
 // Définition des propriétés (props) attendues par le composant
 const props = defineProps({
@@ -17,11 +19,13 @@ const props = defineProps({
 })
 
 // Définition des événements émis par le composant
-const emit = defineEmits(['download-movie', 'select-series'])
+const emit = defineEmits(['select-series'])
 
 // Store pour l'état des filtres
 const contentStore = useContentStore()
 const { selectedCategory, searchQuery, activeTab } = storeToRefs(contentStore)
+
+const videoToDownload = ref(null)
 
 // --- LOGIQUE DE PAGINATION ---
 const currentPage = ref(1)
@@ -68,8 +72,12 @@ watch([searchQuery, selectedCategory, activeTab], () => {
 // Gestion du clic sur un élément
 const handleAction = (item) => {
   if (props.type === ContentType.MOVIES) {
-    emit('download-movie', item)
+    // telechargement movie
+    const extension = item.container_extension
+    const url =  XtreamService.getInstance().getMovieDownloadUrl(item.stream_id, extension)
+    videoToDownload.value = { url, name: item.name };
   } else {
+    // ouverture de detail de la série
     emit('select-series', item)
   }
 }
@@ -129,4 +137,6 @@ defineExpose({
       >Next</button>
     </div>
   </div>
+  <!-- modal de telechargement movie -->
+  <DownloadModal :video="videoToDownload" @close="videoToDownload = null" />
 </template>

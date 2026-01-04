@@ -7,8 +7,8 @@ import {XtreamService} from "@/services/xtream.js";
 
 
 const loadingStore = useLoadingStore()
-const {isLoading} = storeToRefs(loadingStore)
 const authStore = useAuthStore()
+const {isLoading} = storeToRefs(loadingStore)
 const {credentials, isAuthenticated} = storeToRefs(authStore)
 const toast = useToast()
 
@@ -26,7 +26,7 @@ const handleSubmit = async () => {
 <template>
   <div class="login-container">
     <div class="intro-text">
-      <h2>Bieservicenvenue sur IPTV Downloader</h2>
+      <h2>Bienvenue sur IPTV Downloader</h2>
       <p>
         Cet outil vous permet de vous connecter à votre abonnement IPTV (via l'API Xtream Codes)
         pour parcourir et télécharger facilement vos films et séries.
