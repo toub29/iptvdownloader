@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import './firebase'
 
 import App from './App.vue'
 

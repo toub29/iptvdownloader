@@ -4,6 +4,8 @@ import {useAuthStore} from '../stores/auth'
 import {storeToRefs} from 'pinia'
 import {useToast} from 'vue-toastification'
 import {XtreamService} from "@/services/xtream.js";
+import {logEvent} from 'firebase/analytics'
+import {analytics} from "@/firebase.js";
 
 
 const loadingStore = useLoadingStore()
@@ -17,8 +19,11 @@ const handleSubmit = async () => {
   await XtreamService.getInstance().authenticate()
       .then(_ => isAuthenticated.value = true)
       .catch(e => {
-        toast.error(e.message)
         loadingStore.stopLoading()
+        toast.error(e.message)
+      })
+      .finally(() => {
+        logEvent(analytics, 'login')
       })
 }
 </script>

@@ -1,5 +1,8 @@
 <script setup>
-defineProps({
+import {logEvent} from "firebase/analytics";
+import {analytics} from "@/firebase.js";
+
+const props = defineProps({
   video: {
     type: Object,
     required: false,
@@ -7,6 +10,11 @@ defineProps({
 });
 
 defineEmits(['close']);
+const logevent = () =>{
+  logEvent(analytics, 'file_download', {
+    file_name: props.video.name
+  });
+}
 </script>
 
 <template>
@@ -19,7 +27,7 @@ defineEmits(['close']);
         liées à votre navigateur.
       </p>
       <div class="link-container">
-        <a :href="video.url" target="_blank"  rel="noopener">{{ video.name }}</a>
+        <a :href="video.url" target="_blank"  @contextmenu="logevent()" rel="noopener">{{ video.name }}</a>
       </div>
       <button @click="$emit('close')" class="close-btn">Fermer</button>
     </div>
